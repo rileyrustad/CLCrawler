@@ -31,17 +31,6 @@ def GetMasterApartmentData():
         f.close()
         return GetMasterApartmentData()
 
-#
-#def GetUnexploredNumbers():
-#    if os.path.isfile('/Users/mac28/CLCrawler/UnexploredNumbers.txt') == True:
-#        return pickle.load(open('/Users/mac28/CLCrawler/UnexploredNumbers.txt','rb'))
-#    else:
-#        data = []
-#        f = open('/Users/mac28/CLCrawler/UnexploredNumbers.txt','wb')
-#        pickle.dump(data,f)
-#        f.close()
-#        return GetUnexploredNumbers()
-
 
 '''what if craigslist reuses numbers? build in back up for that'''
 '''create that day's dictionary, save it to the master'''
@@ -349,6 +338,11 @@ def TimePosted(soup):
     time = str(summary)[43:51]
     return date, time
 
+def merge_two_dicts(x, y):
+    '''Given two dicts, merge them into a new dict as a shallow copy.'''
+    z = x.copy()
+    z.update(y)
+    return z
             
 def Final():
     mydict = GetMasterApartmentData()
@@ -376,7 +370,7 @@ def Final():
     TodayMasterData = open('/Users/mac28/CLCrawler/MasterApartmentData'+date+'.txt',"wb")
     MasterData = open('/Users/mac28/CLCrawler/MasterApartmentData.txt',"wb")
     pickle.dump(newdict,TodayData)
-    mydict.update(newdict)    
+    mydict = merge_two_dicts(mydict,newdict)   
     pickle.dump(mydict,TodayMasterData)
     pickle.dump(mydict,MasterData)
     TodayData.close()
