@@ -23,7 +23,11 @@ import pickle
 
 def GetMasterApartmentData():
     if os.path.isfile('/Users/mac28/CLCrawler/MasterApartmentData.txt') == True:
-        return pickle.load(open('/Users/mac28/CLCrawler/MasterApartmentData.txt','rb'))
+        f = open('/Users/mac28/CLCrawler/MasterApartmentData.txt','rb')
+        mydict = pickle.load(f)
+        f.close()
+        return mydict
+        
     else:
         data = {}
         f = open('/Users/mac28/CLCrawler/MasterApartmentData.txt','wb')
@@ -384,6 +388,7 @@ print Final()
 '''find a way for chekcing duplicate listings with different numbers'''
 '''fix bedbath so that it works for everything'''
 '''don't forget to put in a separate file for todays date'''
+'''make a version that runs automatically every day'''
     
 '''FOR WHEN YOU WANT TO USE PANDAS FOR ANALYSIS
 dframe = DataFrame.from_dict(mydict)
