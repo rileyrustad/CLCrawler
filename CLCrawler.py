@@ -384,7 +384,11 @@ def Final():
     
 print Final()
         
-'''make a version that saves off 1.just today's entries 2. todays updated dict and 3. updates the master file'''         
+'''what if you added a "date last seen" function. You're already collecting ALL 
+the ID's, just add todays date to all of them. I measures how long entries stay up'''
+'''have all functions organized by classes'''
+'''make a version that saves off 1.just today's entries 2. 
+todays updated dict and 3. updates the master file'''         
 '''find a way for chekcing duplicate listings with different numbers'''
 '''fix bedbath so that it works for everything'''
 '''don't forget to put in a separate file for todays date'''
