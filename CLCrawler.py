@@ -15,23 +15,21 @@ import requests
 import time
 import random
 import datetime
-import pickle
+import json
+from pandas import DataFrame
 
 
 #Determines if I have run code before, and if I have loads the previous results,
 #Should always be empty since we explore all the id numbers 
-
+    
 def GetMasterApartmentData():
-    if os.path.isfile('/Users/mac28/CLCrawler/MasterApartmentData.txt') == True:
-        f = open('/Users/mac28/CLCrawler/MasterApartmentData.txt','rb')
-        mydict = pickle.load(f)
+    if os.path.isfile('/Users/mac28/CLCrawler/MasterApartmentData.json') == True:
+        f = open('/Users/mac28/CLCrawler/MasterApartmentData.json')      
+        mydict = json.load(f)
         f.close()
         return mydict
-        
     else:
-        data = {}
-        f = open('/Users/mac28/CLCrawler/MasterApartmentData.txt','wb')
-        pickle.dump(data,f)
+        f = open('/Users/mac28/CLCrawler/MasterApartmentData.json','w')
         f.close()
         return GetMasterApartmentData()
 
@@ -307,7 +305,9 @@ def LatLon(soup):
         return np.nan, np.nan
     else:
         summarystring = str(summary)
-        if summarystring[58] == '"':
+        if summarystring[57:59] == '""':
+            return np.nan, np.nan        
+        elif summarystring[58] == '"':
             lat = summarystring[59:68]
             lon = summarystring[86:97]
             return float(lat), float(lon)
@@ -347,7 +347,13 @@ def merge_two_dicts(x, y):
     z = x.copy()
     z.update(y)
     return z
-            
+
+def dump(my_dict, fil):
+    dframe = DataFrame.from_dict(my_dict)
+    dframe.to_csv(fil)
+    fil.close()
+    
+
 def Final():
     mydict = GetMasterApartmentData()
     print 'length of mydict is '+str(len(mydict))
@@ -365,21 +371,19 @@ def Final():
         for i in enumerate(unexplored_id_numbers):
             id_number = unexplored_id_numbers.pop(-1)
             if id_number not in mydict or newdict:
+                print str(id_number)+' '+ str(counter)
                 newdict = InfoGetter(id_number,newdict)
                 time.sleep(random.randrange(2, 3))
                 counter += 1
-                print str(id_number)+' '+ str(counter)
     date = str(datetime.datetime.now())[:19].replace(' ','_').replace(':','.')
-    TodayData = open('/Users/mac28/CLCrawler/TodaysData'+date+'.txt',"wb")
-    TodayMasterData = open('/Users/mac28/CLCrawler/MasterApartmentData'+date+'.txt',"wb")
-    MasterData = open('/Users/mac28/CLCrawler/MasterApartmentData.txt',"wb")
-    pickle.dump(newdict,TodayData)
+    TodayData = open('/Users/mac28/CLCrawler/data/TodaysData'+date+'.json',"w")
+    TodayMasterData = open('/Users/mac28/CLCrawler/data/MasterApartmentData'+date+'.json',"w")
+    MasterData = open('/Users/mac28/CLCrawler/MasterApartmentData.json',"w")
+    json.dump(newdict,TodayData)
     mydict = merge_two_dicts(mydict,newdict)   
-    pickle.dump(mydict,TodayMasterData)
-    pickle.dump(mydict,MasterData)
-    TodayData.close()
-    TodayMasterData.close()
-    MasterData.close()
+    json.dump(mydict, TodayMasterData)
+    json.dump(mydict, MasterData)
+
     
     
 print Final()
