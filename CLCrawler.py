@@ -305,12 +305,15 @@ def LatLon(soup):
         return np.nan, np.nan
     else:
         summarystring = str(summary)
-        if summarystring[57:59] == '""':
-            return np.nan, np.nan        
-        elif summarystring[58] == '"':
-            lat = summarystring[59:68]
-            lon = summarystring[86:97]
-            return float(lat), float(lon)
+        if summarystring[58] == '"':
+            if summarystring[96] == '"':
+                lat = summarystring[59:68]
+                lon = summarystring[86:96]
+                return float(lat), float(lon)
+            else:
+                lat = summarystring[59:68]
+                lon = summarystring[86:97]
+                return float(lat), float(lon)
         else:
             if summarystring[95] == '"':
                 lat = summarystring[58:67]
@@ -387,7 +390,8 @@ def Final():
     
     
 print Final()
-        
+ 
+'''find the duplicates'''       
 '''what if you added a "date last seen" function. You're already collecting ALL 
 the ID's, just add todays date to all of them. I measures how long entries stay up'''
 '''have all functions organized by classes'''
