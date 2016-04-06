@@ -305,6 +305,9 @@ def LatLon(soup):
         return np.nan, np.nan
     else:
         summarystring = str(summary)
+        if summarystring[58:60] == '""' or summarystring[57:59] == '""':
+            return np.nan, np.nan
+        
         if summarystring[58] == '"':
             if summarystring[96] == '"':
                 lat = summarystring[59:68]
@@ -401,6 +404,10 @@ todays updated dict and 3. updates the master file'''
 '''fix bedbath so that it works for everything'''
 '''don't forget to put in a separate file for todays date'''
 '''make a version that runs automatically every day'''
+'''The next interesting thing to collect would be how long a posting stays up for.
+    You already have time posted, but since you're already pulling all of the numbers,
+    you could update each entry to include "last seen". This would work better if 
+    you had continuous collection rather than just once a day.'''
     
 '''FOR WHEN YOU WANT TO USE PANDAS FOR ANALYSIS
 dframe = DataFrame.from_dict(mydict)
